@@ -1,29 +1,34 @@
-#include "sgbd.h"
+#include "projeto.h"
 #include "stdio.h"
 #include "stdlib.h"
+#include "bst.h"
+#include "avl.h"
+#include "rb.h"
 
 int main(void) {
     tabela tb;
     int ret, opcao, chave;
-    ret = inicializar_tabela(&tb);
+    ret = inicializarTabela(&tb);
 
     while(1) {
         scanf("%d", &opcao);
         switch (opcao)
         {
             case 1: // ADICIONAR JOGADOR
-                adicionar_pokemon(&tb, ler_dados());
+                adicionarJogador(&tb, lerDados());
                 break;
             case 2: // Imprimir elementos
-                in_order(&tb);
+                in_orderBST(&tb);
+                in_orderAVL(&tb);
+                in_orderRB(&tb);
                 break;
             case 3: // BUSCAR ELEMENTO
                 scanf("%d", &chave);
-                busca(&tb, tb.indice_avl, chave);
+                buscaBST(chave, tb.indice_bst);
                 break;
             case 4: // REMOVER ELEMENTO
                 scanf("%d", &chave);
-                remover_indice(&tb, chave);
+                removerIndice(&tb, chave);
                 break;
             case 99: // SAIR
                 finalizar(&tb);

@@ -4,9 +4,6 @@
 
 arvoreRB no_null;
 
-/*
-Inicializa a árvore vazia com a raiz = null e inicializa o nó nulo duplo preto que será utilizado no método remover.
-*/
 void inicializarRB(arvoreRB *raiz) {
 	*raiz = NULL;
 	no_null = (arvoreRB) malloc(sizeof(struct no_rb));
@@ -17,23 +14,26 @@ void inicializarRB(arvoreRB *raiz) {
     no_null->pai = NULL;
 }
 
-/* Adiciona um novo elemento na árvore.
-Parâmetros:
-    valor   - elemento a ser adicionado
-    raiz    - árvore onde o elemento será adicionado. 
-              Observe que este parâmetro é um ponteiro de ponteiro
-*/
+arvoreRB tio(arvoreRB elemento) {
+	return irmao(elemento->pai);
+}
 
-
-void adicionar (int valor, arvoreRB *raiz) {
+arvoreRB avo(arvoreRB elemento){
+	return elemento->pai->pai;
+}
+void rotacao_dupla_direita(arvoreRB *raiz, arvoreRB pivo) {
+    rotacao_simples_esquerda(raiz, pivo->esq);
+    rotacao_simples_direita(raiz, pivo);
+}
+void rotacao_dupla_esquerda(arvoreRB *raiz, arvoreRB pivo){
+    rotacao_simples_direita(raiz, pivo->dir);
+    rotacao_simples_esquerda(raiz, pivo);
+}
+void adicionarRB (int valor, arvoreRB *raiz) {
 	arvoreRB posicao, pai, novo;
-    //utiliza-se *raiz, por ser um ponteiro de ponteiro
 	posicao = *raiz;
 	pai = NULL;
 
-	/*navega na árvore até encontrar a posição vaga apropriada para o elemento,
-		nesta "descida" é necessário manter o ponteiro para o pai, pois após encontrar 
-		a posição vaga (NULL) não seria possível navegar para o pai com o ponteiro posicao->pai */
 	 while(posicao != NULL) {
 			pai = posicao;
 			if(valor > posicao->dado) 
@@ -43,7 +43,7 @@ void adicionar (int valor, arvoreRB *raiz) {
 	}
 
 
-    //Após achar a posição, inicializa o novo elemento
+  
 	novo = (arvoreRB) malloc(sizeof(struct no_rb));
 	novo->dado = valor;
 	novo->esq = NULL;
@@ -51,65 +51,50 @@ void adicionar (int valor, arvoreRB *raiz) {
 	novo->pai = pai;
 	novo->cor = VERMELHO;
 
-    //Atualiza a raiz da árvore, caso esteja inserindo o primeiro elemento
-    //Observe novamente o uso do ponteiro de ponteiro
+
 	if(eh_raiz(novo))	
 			*raiz = novo;
 	else {
-        //Se não for a raiz, é preciso realizar a ligação do pai(direita ou esquerda) com o novo elemento
+      
 		if(valor > pai->dado)
 			pai->dir = novo;
 		else
 			pai->esq = novo;
 	}
 
-    //Após inserir, verifica e ajusta a árvore resultante
+
 	ajustar(raiz, novo);
 }
 
 
-/* Verifica se a árvore está obedecendo todas as regras da RB e aplica as correções necessárias após a inserção.
-Parâmetros:
-    raiz - raiz (absoluta) da árvore
-    elemento - nó recentemente inserido que pode ter causado o desajuste da árvore
-*/
 void ajustar(arvoreRB *raiz, arvoreRB elemento){
-    //A árvore está desajustada se tanto o elemento quanto o seu pai estiverem com a cor vermelha
-    //Utilizamos um while para continuar a verificação até chegar a raiz, quando necessário
+    
 	while(cor(elemento->pai) == VERMELHO && cor(elemento) == VERMELHO) {
-			//caso 1: Cor do tio é vermelha, desce o preto do avô
+
 			if(cor(tio(elemento)) == VERMELHO) {
 				recolorir(avo(elemento));
-				//tio(elemento)->cor = PRETO;
-				//elemento->pai->cor = PRETO;
-				//elemento->pai->pai->cor = VERMELHO;
-
-				//Continua a verificação a partir do avô, que mudou para vermelho e pode ter 
-				//gerado uma sequência vermelho-vermelho				
+								
 				elemento = elemento->pai->pai;
 				continue;
 			} 
-			//caso 2a: rotação simples direita
+
 			if(eh_filho_esquerdo(elemento) && eh_filho_esquerdo(elemento->pai)) {
 					rotacao_simples_direita(raiz, elemento->pai->pai);
 					recolorir(elemento->pai);
-					//elemento->pai->cor = PRETO;
-					//elemento->pai->dir->cor = VERMELHO;
+					
 
 					elemento = elemento->pai;
 					continue;
 			}
-			//caso 2b: rotação simples esquerda
+		
 			if(!eh_filho_esquerdo(elemento) && !eh_filho_esquerdo(elemento->pai)) {
 					rotacao_simples_esquerda(raiz, elemento->pai->pai);
 					recolorir(elemento->pai);
-					//elemento->pai->cor = PRETO;
-					//elemento->pai->esq->cor = VERMELHO;
 
 					elemento = elemento->pai;
 					continue;
 			}
-			//caso 3a: rotação dupla direita
+
 			if(!eh_filho_esquerdo(elemento)&&
 			    eh_filho_esquerdo(elemento->pai)&&
 			   (tio(elemento) == NULL ||
@@ -117,14 +102,10 @@ void ajustar(arvoreRB *raiz, arvoreRB elemento){
 
 					rotacao_dupla_direita(raiz, elemento->pai->pai);
 					recolorir(elemento);
-					//rotacao_simples_esquerda(raiz, elemento->pai);
-					//rotacao_simples_direita(raiz, elemento->pai);
-					//elemento->cor = PRETO;
-					//elemento->esq->cor = VERMELHO;
-					//elemento->dir->cor = VERMELHO;
+
 					continue;
 			}
-			//caso 3b: rotação dupla esquerda
+			
 			if(eh_filho_esquerdo(elemento)&&
 			  !eh_filho_esquerdo(elemento->pai)&&
 			  (tio(elemento) == NULL ||
@@ -132,16 +113,11 @@ void ajustar(arvoreRB *raiz, arvoreRB elemento){
 
 					rotacao_dupla_esquerda(raiz, elemento->pai->pai);
 					recolorir(elemento);
-					//rotacao_simples_direita(raiz, elemento->pai);
-					//rotacao_simples_esquerda(raiz, elemento->pai);
-					//elemento->cor = PRETO;
-					//elemento->dir->cor = VERMELHO;
-					//elemento->esq->cor = VERMELHO;
+
 					continue;
 			}
 
 	}
-    //Após todas as correções a raiz pode ter ficado na cor vermelha, portanto passamos ela novamente para cor preta
 	(*raiz)->cor = PRETO;
 }
 
@@ -220,14 +196,7 @@ void rotacao_simples_esquerda(arvoreRB *raiz, arvoreRB pivo) {
 	}
 }
 
-void rotacao_dupla_direita(arvoreRB *raiz, arvoreRB pivo) {
-    rotacao_simples_esquerda(raiz, pivo->esq);
-    rotacao_simples_direita(raiz, pivo);
-}
-void rotacao_dupla_esquerda(arvoreRB *raiz, arvoreRB pivo){
-    rotacao_simples_direita(raiz, pivo->dir);
-    rotacao_simples_esquerda(raiz, pivo);
-}
+
 void recolorir(arvoreRB pivo){
 	
 	if(pivo->esq != NULL)
@@ -256,13 +225,7 @@ int eh_filho_esquerdo(arvoreRB elemento) {
 	return (elemento->pai != NULL && elemento == elemento->pai->esq);
 }
 
-arvoreRB tio(arvoreRB elemento) {
-	return irmao(elemento->pai);
-}
 
-arvoreRB avo(arvoreRB elemento){
-	return elemento->pai->pai;
-}
 
 arvoreRB irmao(arvoreRB elemento) {
 	if(eh_filho_esquerdo(elemento))
@@ -299,7 +262,7 @@ int maior_elemento(arvoreRB raiz) {
 	if(raiz == NULL)
 			return -1;
 	if(raiz->dir == NULL)
-			return raiz->dado;
+			return raiz->dado->chave;
 	else
 			return maior_elemento(raiz->dir);
 }
@@ -308,7 +271,7 @@ int menor_elemento(arvoreRB raiz) {
 	if(raiz == NULL)
 			return -1;
 	if(raiz->esq == NULL)
-			return raiz->dado;
+			return raiz->dado->chave;
 	else
 			return maior_elemento(raiz->esq);
 }
@@ -356,18 +319,15 @@ void remover (int valor, arvoreRB *raiz) {
 	posicao = *raiz;
 
 	while(posicao != NULL) {
-		if(valor == posicao->dado) {
-			//elemento possui dois filhos
+		if(valor == posicao->dado->chave) {
             if(posicao->esq != NULL && posicao->dir != NULL) { 
-    			posicao->dado = maior_elemento(posicao->esq);   
-	    		remover(posicao->dado, &(posicao->esq));
+    			posicao->dado->chave = maior_elemento(posicao->esq);   
+	    		remover(posicao->dado->chave, &(posicao->esq));
                 break;
             }
 
-			//O elemento possui apenas um filho (direito)
+			
 			if(posicao->esq == NULL && posicao->dir != NULL) {
-                //O seu filho direito sobe para a posição do elemento  a ser removido
-				//e recebe a cor preta
 				posicao->dir->cor = PRETO;
                 posicao->dir->pai = posicao->pai;
 
@@ -384,8 +344,6 @@ void remover (int valor, arvoreRB *raiz) {
 				break;
 			}
 
-
-			//O elemento possui apenas um filho (esquerdo)
 			if(posicao->dir == NULL && posicao->esq != NULL) {
 				posicao->esq->cor = PRETO;
 				posicao->esq->pai = posicao->pai;
@@ -403,18 +361,16 @@ void remover (int valor, arvoreRB *raiz) {
 				break;
 			}
 
-			//O elemento não possui filhos
+			
 			if(posicao->esq == NULL && posicao->dir == NULL) {
-				//Remover raiz sem filhos					
+									
 				if(eh_raiz(posicao)) {
 					*raiz = NULL;
                     free(posicao);
 					break;
 				}
 
-				//Remover elemento que não possui filhos e não é raiz
-				//Se for vermelho, apenas remove atualizando o ponteiro 
-				//correspondente do pai
+				
 				if(posicao->cor == VERMELHO) {
 					if(eh_filho_esquerdo(posicao))
 						posicao->pai->esq = NULL;
@@ -423,8 +379,7 @@ void remover (int valor, arvoreRB *raiz) {
                     free(posicao);
 					break;
 				} else {
-					//Se o elemento for preto, substitui pelo duplo preto e depois ajusta
-					//a árvore
+					
 					no_null->cor = DUPLO_PRETO;
 					no_null->pai = posicao->pai;
 					if(eh_filho_esquerdo(posicao))
@@ -437,15 +392,13 @@ void remover (int valor, arvoreRB *raiz) {
 				}
 			}
 		}	
-		if(valor > posicao->dado) 
+		if(valor > posicao->dado->chave) 
 				posicao = posicao->dir;
 		else 
 				posicao = posicao->esq;
 	}
 }
 
-/*Realiza a correção da árvore após a remoção de um elemento preto que não possui filhos, 
-ou seja, elimina o nó null o duplo-preto.*/
 void reajustar(arvoreRB *raiz, arvoreRB elemento){
 
 	//caso 1	

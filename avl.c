@@ -92,7 +92,7 @@ arvoreAVL rotacao(arvoreAVL pivo) {
 }
 
 
-arvoreAVL inserir(arvoreAVL raiz, int valor, int *cresceu){
+arvoreAVL inserirAVL(arvoreAVL raiz, int valor, int *cresceu){
     //caso base
     if(raiz == NULL) {
         //1. Alocar espaço em memória
@@ -110,7 +110,7 @@ arvoreAVL inserir(arvoreAVL raiz, int valor, int *cresceu){
     //caso indutivo
     else {
         if(valor > raiz->valor) {
-            raiz->dir = inserir(raiz->dir, valor, cresceu);
+            raiz->dir = inserirAVL(raiz->dir, valor, cresceu);
             //após inserir, é preciso atualizar os fatores de balanço
             //fator de balanço "atual" => raiz->fb
             //sub-árvore cresceu ou não => *cresceu
@@ -131,7 +131,7 @@ arvoreAVL inserir(arvoreAVL raiz, int valor, int *cresceu){
                 }
             }
         } else {
-            raiz->esq = inserir(raiz->esq, valor, cresceu);
+            raiz->esq = inserirAVL(raiz->esq, valor, cresceu);
             if(*cresceu) {
                 switch(raiz->fb) {
                     case 0:
@@ -154,17 +154,6 @@ arvoreAVL inserir(arvoreAVL raiz, int valor, int *cresceu){
 }
 
 
-
-
-void pre_orderAVL(arvoreAVL raiz){
-    if(raiz != NULL){
-        printf("[%d]", raiz->valor);
-
-        pre_orderAVL(raiz->esq);
-        pre_orderAVL(raiz->dir);
-    }
-}
-
 void in_orderAVL(arvoreAVL raiz){
     if(raiz != NULL){
         
@@ -176,103 +165,6 @@ void in_orderAVL(arvoreAVL raiz){
 }
 
 
-void pos_order(arvoreAVL raiz){
-    if(raiz != NULL){
-        pos_orderAVL(raiz->esq);
-        pos_orderAVL(raiz->dir);
-        printf("[%d]", raiz->valor);
-    }
-}
-
-void exibir_reverso(arvoreAVL raiz){
-    if(raiz != NULL) {
-      
-    exibir_reverso(raiz->dir);
-    printf("[%d]", raiz->valor);
-    exibir_reverso(raiz->esq);
-    
-    
-}
-}
-int qtd_par(arvoreAVL raiz){
-    if (raiz == NULL) {
-        return 0; 
-    }
-    int contador = 0;
-
-    if(raiz->valor % 2 == 0){
-       contador++; 
-    }  
-    contador += qtd_par(raiz->esq);
-    contador += qtd_par(raiz->dir);
-
-    return contador;
-}
-
-int pai(arvoreAVL raiz, int i){
-
-
-   if (raiz->valor == i ){
-            printf("-1");
-        }
-    if ((raiz->esq != NULL && raiz->esq->valor == i) || (raiz->dir != NULL && raiz->dir->valor == i)){
-            printf("[%d]", raiz->valor);
-            
-        }else {
-        
-        if (i < raiz->valor) {
-            pai(raiz->esq, i);
-        } else if (i > raiz->valor) {
-            pai(raiz->dir, i);
-        } else {
-            printf("-1\n");
-        }
-    }
-
-}
-
-int somatorio(arvoreAVL raiz) {
-    if (raiz == NULL) {
-        return 0; 
-    }
-
-    int soma = raiz->valor; 
-    soma += somatorio(raiz->esq);
-    soma += somatorio(raiz->dir); 
-
-    return soma;
-}
-
-int somatorio_par(arvoreAVL raiz){
-     if (raiz == NULL) {
-        return 0; 
-    }
-
-    int soma = 0;
-
-    if (raiz->valor % 2 == 0){
-        soma += raiz->valor;
-    }
-    soma += somatorio_par(raiz->esq);
-    soma += somatorio_par(raiz->dir);
-
-    return soma;
-
-    }
-
-arvoreAVL podar(arvoreAVL raiz, int i){
-    if (raiz == NULL) {
-        return 0; 
-    }
-    if (raiz->valor == i){
-        raiz->esq = NULL;
-        raiz->dir = NULL;
-    }
-    podar(raiz->esq, i);
-    podar(raiz->dir, i);
-
-    return raiz;
-}
 
 arvoreAVL buscaAVL(int valor, arvoreAVL raiz) {
     if (raiz == NULL) {
@@ -290,17 +182,6 @@ arvoreAVL buscaAVL(int valor, arvoreAVL raiz) {
     }
 }
 
-void dobrar(arvoreAVL raiz){
-    int dobro;
-    if(raiz != NULL){
-        dobro = (raiz->valor) * (raiz->valor);
-        printf("[%d]", dobro);
-        dobrar(raiz->esq);
-        dobro = (raiz->valor) * (raiz->valor);  
-        dobrar(raiz->dir);
-    }
-
-}
 
 
 void filhos(arvoreAVL filha) {
@@ -331,11 +212,11 @@ int alturaAVL(arvoreAVL raiz){
         return 0; 
     }
     int contadoresq = 0;
-    if(raiz->valor % 1 == 0){
+    if(raiz->valor->chave % 1 == 0){
         contadoresq++; 
         } 
     int contadordir = 0;
-    if(raiz->valor % 1 == 0){
+    if(raiz->valor->chave % 1 == 0){
         contadordir++; 
         } 
     contadoresq += alturaAVL(raiz->esq);

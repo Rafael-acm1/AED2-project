@@ -1,15 +1,13 @@
 #ifndef RB_H
 #define RB_H
-#include "../sgbd.h"
+#include "projeto.h"
 
-
-typedef int tipo_dado;
 
 
 void inicializarRB(arvoreRB *raiz);
-void adicionar (int valor, arvoreRB *raiz);
+void adicionarRB (int valor, arvoreRB *raiz);
 void remover (int valor, arvoreRB *raiz);
-
+void recolorir(arvoreRB pivo);
 int alturaRB(arvoreRB raiz);
 int maior(int a, int b);
 int maior_elemento(arvoreRB raiz);

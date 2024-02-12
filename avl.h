@@ -1,11 +1,11 @@
 #ifndef BST_H
 #define BST_H
-#include "../sgbd.h"
+#include "projeto.h"
 
 
 
 void inicializarAVL(arvoreAVL *raiz); 
-arvoreAVL inserir(arvoreAVL raiz, int valor, int *cresceu);
+arvoreAVL inserirAVL(arvoreAVL raiz, int valor, int *cresceu);
 void pre_orderAVL(arvoreAVL raiz);
 void in_orderAVL(arvoreAVL raiz);
 void pos_orderAVL(arvoreAVL raiz);
