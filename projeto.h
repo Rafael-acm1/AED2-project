@@ -46,7 +46,12 @@ typedef struct tabela {
 } tabela;
 
 
+int inicializarTabela(tabela *tabela);
+void adicionarJogador(tabela *tabela, jogadorSP *jogador);
+jogadorSP* lerDados();
+void finalizar(tabela *tab);
+void in_orderAVL(arvoreAVL raiz);
+void removerIndice(tabela *tab, int *valor);
 
-;
 
 #endif

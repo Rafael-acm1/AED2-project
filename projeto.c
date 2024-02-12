@@ -6,6 +6,26 @@
 #include "bst.h"
 
 
+// void in_orderBST(arvoreBST raiz){
+//     if(raiz != NULL){
+//         in_orderBST(raiz->esq);
+//         printf("[%d]", raiz->valor);
+//         in_orderBST(raiz->dir);
+//     }
+// }
+void adicionarIndice(tabela *tab, tipo_dado *valor) {
+    int cresceu;
+    tab->indice_bst = inserirBST(tab->indice_bst, valor->chave);
+    tab->indice_avl = inserirAVL(tab->indice_avl, valor->chave, cresceu);
+    inserirRB(valor->chave, tab->indice_rb);
+    // tab->indice_rb = inserirRB(tab->indice_rb, valor->chave);
+}
+void removerIndice(tabela *tab, int *valor) {
+    int cresceu;
+    tab->indice_bst = removerBST(tab->indice_bst, valor);
+    tab->indice_avl = removerAVL(tab->indice_avl, valor);
+    removerRB(valor, tab->indice_rb);
+}
 void inicializarIndices(tabela *tab) {
     inicializarAVL(&tab->indice_avl);
     inicializarRB(&tab->indice_rb);
@@ -20,7 +40,7 @@ void carregarArquivos(tabela *tab) {
     if(arqAVL != NULL) {
         temp = (tipo_dado*) malloc(sizeof(tipo_dado));
         while(fread(temp, sizeof(tipo_dado), 1, arqAVL)) {
-            tab->indice_avl = inserirAVL(tab->indice_avl, temp, &cresceu);
+            tab->indice_avl = inserirAVL(tab->indice_avl, temp, cresceu);
             temp = (tipo_dado*) malloc(sizeof(tipo_dado));
         }
         fclose(arqAVL);
@@ -30,7 +50,7 @@ void carregarArquivos(tabela *tab) {
     if(arqRB != NULL) {
         temp = (tipo_dado*) malloc(sizeof(tipo_dado));
         while(fread(temp, sizeof(tipo_dado), 1, arqRB)) {
-            adicionarRB(temp, &(tab->indice_rb));
+            inserirRB(temp, &(tab->indice_rb));
             temp = (tipo_dado*) malloc(sizeof(tipo_dado));
         }
         fclose(arqRB);
@@ -40,7 +60,7 @@ void carregarArquivos(tabela *tab) {
     if(arqBST != NULL) {
         temp = (tipo_dado*) malloc(sizeof(tipo_dado));
         while(fread(temp, sizeof(tipo_dado), 1, arqBST)) {
-            tab->indice_bst = inserirBST(tab->indice_bst, temp);
+            tab->indice_bst->valor = inserirBST( temp->chave, tab->indice_bst);
             temp = (tipo_dado*) malloc(sizeof(tipo_dado));
         }
         fclose(arqBST);
@@ -49,7 +69,7 @@ void carregarArquivos(tabela *tab) {
 
 
 void carregarIndices(tabela *tab) {
-    carregar_arquivos(tab);
+    carregarArquivos(tab);
 }
 
 int inicializarTabela(tabela *tabela) {
@@ -59,7 +79,9 @@ int inicializarTabela(tabela *tabela) {
 
     return (tabela->arquivo_dados != NULL);
 }
-
+void tirarEnter(char *string){
+    string[strlen(string) - 1] = '\0';
+}
 jogadorSP* lerDados() {
     jogadorSP *novo = (jogadorSP*) malloc(sizeof(jogadorSP));
     getchar();
@@ -83,9 +105,7 @@ jogadorSP* lerDados() {
     return novo;
 }
 
-void tirarEnter(char *string){
-    string[strlen(string) - 1] = '\0';
-}
+
 
 void adicionarJogador(tabela *tabela, jogadorSP *jogador) {
     if (tabela->arquivo_dados != NULL) {
@@ -100,6 +120,30 @@ void adicionarJogador(tabela *tabela, jogadorSP *jogador) {
     }
 }
 
+void salvar_auxiliar_bst(arvoreBST raiz, FILE *arq){
+	if(raiz != NULL) {
+		fwrite(raiz->valor, sizeof(tipo_dado), 1, arq);
+		salvar_auxiliar_bst(raiz->esq, arq);
+		salvar_auxiliar_bst(raiz->dir, arq);
+	}
+
+}
+void salvar_auxiliar_avl(arvoreAVL raiz, FILE *arq){
+	if(raiz != NULL) {
+		fwrite(raiz->valor, sizeof(tipo_dado), 1, arq);
+		salvar_auxiliar_avl(raiz->esq, arq);
+		salvar_auxiliar_avl(raiz->dir, arq);
+	}
+
+}
+void salvar_auxiliar_rb(arvoreRB raiz, FILE *arq){
+	if(raiz != NULL) {
+		fwrite(raiz->dado, sizeof(tipo_dado), 1, arq);
+		salvar_auxiliar_rb(raiz->esq, arq);
+		salvar_auxiliar_rb(raiz->dir, arq);
+	}
+
+}
 
 // \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 

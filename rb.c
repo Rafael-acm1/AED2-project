@@ -14,6 +14,7 @@ void inicializarRB(arvoreRB *raiz) {
     no_null->pai = NULL;
 }
 
+
 arvoreRB tio(arvoreRB elemento) {
 	return irmao(elemento->pai);
 }
@@ -21,22 +22,22 @@ arvoreRB tio(arvoreRB elemento) {
 arvoreRB avo(arvoreRB elemento){
 	return elemento->pai->pai;
 }
-void rotacao_dupla_direita(arvoreRB *raiz, arvoreRB pivo) {
-    rotacao_simples_esquerda(raiz, pivo->esq);
-    rotacao_simples_direita(raiz, pivo);
+void rotacao_dupla_direitaRB(arvoreRB *raiz, arvoreRB pivo) {
+    rotacao_simples_esquerdaRB(raiz, pivo->esq);
+    rotacao_simples_direitaRB(raiz, pivo);
 }
-void rotacao_dupla_esquerda(arvoreRB *raiz, arvoreRB pivo){
-    rotacao_simples_direita(raiz, pivo->dir);
-    rotacao_simples_esquerda(raiz, pivo);
+void rotacao_dupla_esquerdaRB(arvoreRB *raiz, arvoreRB pivo){
+    rotacao_simples_direitaRB(raiz, pivo->dir);
+    rotacao_simples_esquerdaRB(raiz, pivo);
 }
-void adicionarRB (int valor, arvoreRB *raiz) {
+void inserirRB (int valor, arvoreRB *raiz) {
 	arvoreRB posicao, pai, novo;
 	posicao = *raiz;
 	pai = NULL;
 
 	 while(posicao != NULL) {
 			pai = posicao;
-			if(valor > posicao->dado) 
+			if(valor > posicao->dado->chave) 
 					posicao = posicao->dir;
 			else 
 					posicao = posicao->esq;
@@ -45,7 +46,7 @@ void adicionarRB (int valor, arvoreRB *raiz) {
 
   
 	novo = (arvoreRB) malloc(sizeof(struct no_rb));
-	novo->dado = valor;
+	novo->dado->chave = valor;
 	novo->esq = NULL;
 	novo->dir = NULL;
 	novo->pai = pai;
@@ -56,7 +57,7 @@ void adicionarRB (int valor, arvoreRB *raiz) {
 			*raiz = novo;
 	else {
       
-		if(valor > pai->dado)
+		if(valor > pai->dado->chave)
 			pai->dir = novo;
 		else
 			pai->esq = novo;
@@ -79,7 +80,7 @@ void ajustar(arvoreRB *raiz, arvoreRB elemento){
 			} 
 
 			if(eh_filho_esquerdo(elemento) && eh_filho_esquerdo(elemento->pai)) {
-					rotacao_simples_direita(raiz, elemento->pai->pai);
+					rotacao_simples_direitaRB(raiz, elemento->pai->pai);
 					recolorir(elemento->pai);
 					
 
@@ -88,7 +89,7 @@ void ajustar(arvoreRB *raiz, arvoreRB elemento){
 			}
 		
 			if(!eh_filho_esquerdo(elemento) && !eh_filho_esquerdo(elemento->pai)) {
-					rotacao_simples_esquerda(raiz, elemento->pai->pai);
+					rotacao_simples_esquerdaRB(raiz, elemento->pai->pai);
 					recolorir(elemento->pai);
 
 					elemento = elemento->pai;
@@ -100,7 +101,7 @@ void ajustar(arvoreRB *raiz, arvoreRB elemento){
 			   (tio(elemento) == NULL ||
 				tio(elemento)->cor == PRETO)) {
 
-					rotacao_dupla_direita(raiz, elemento->pai->pai);
+					rotacao_dupla_direitaRB(raiz, elemento->pai->pai);
 					recolorir(elemento);
 
 					continue;
@@ -111,7 +112,7 @@ void ajustar(arvoreRB *raiz, arvoreRB elemento){
 			  (tio(elemento) == NULL ||
 			   tio(elemento)->cor == PRETO)) {
 
-					rotacao_dupla_esquerda(raiz, elemento->pai->pai);
+					rotacao_dupla_esquerdaRB(raiz, elemento->pai->pai);
 					recolorir(elemento);
 
 					continue;
@@ -136,7 +137,7 @@ Após a rotação:
 cor(u) = Preto
 cor(v) = cor(p) = Vermelho
 */
-void rotacao_simples_direita(arvoreRB *raiz, arvoreRB pivo){
+void rotacao_simples_direitaRB(arvoreRB *raiz, arvoreRB pivo){
 			arvoreRB u, t1;
 			u = pivo->esq;
             t1 = u->dir;
@@ -166,7 +167,7 @@ void rotacao_simples_direita(arvoreRB *raiz, arvoreRB pivo){
 			}
 }
 
-void rotacao_simples_esquerda(arvoreRB *raiz, arvoreRB pivo) {
+void rotacao_simples_esquerdaRB(arvoreRB *raiz, arvoreRB pivo) {
 	arvoreRB u, t1;
 	u = pivo->dir;
 	t1= u->esq;
@@ -276,21 +277,9 @@ int menor_elemento(arvoreRB raiz) {
 			return maior_elemento(raiz->esq);
 }
 
-void pre_orderRB(arvoreRB raiz) {
-	if(raiz != NULL) {
-		imprimir_elemento(raiz);
-		pre_orderRB(raiz->esq);
-		pre_orderRB(raiz->dir);
-	}
-}
 
-void pos_order(arvoreRB raiz) {
-	if(raiz != NULL) {
-		pos_order(raiz->esq);
-		pos_order(raiz->dir);
-		imprimir_elemento(raiz);
-	}
-}
+
+
 
 void in_orderRB(arvoreRB raiz) {
 	if(raiz != NULL) {
@@ -314,7 +303,7 @@ void imprimir_elemento(arvoreRB raiz) {
 	}
 }
 
-void remover (int valor, arvoreRB *raiz) {
+void removerRB (int valor, arvoreRB *raiz) {
 	arvoreRB posicao;
 	posicao = *raiz;
 
@@ -322,7 +311,7 @@ void remover (int valor, arvoreRB *raiz) {
 		if(valor == posicao->dado->chave) {
             if(posicao->esq != NULL && posicao->dir != NULL) { 
     			posicao->dado->chave = maior_elemento(posicao->esq);   
-	    		remover(posicao->dado->chave, &(posicao->esq));
+	    		removerRB(posicao->dado->chave, &(posicao->esq));
                 break;
             }
 
@@ -418,9 +407,9 @@ void reajustar(arvoreRB *raiz, arvoreRB elemento){
 		 cor(irmao(elemento)->esq) == PRETO ) {
                 //Verifica se é o caso 2 esquerdo ou direito
 				if(eh_filho_esquerdo(elemento))
-						rotacao_simples_esquerda(raiz, elemento->pai);
+						rotacao_simples_esquerdaRB(raiz, elemento->pai);
 				else
-						rotacao_simples_direita(raiz, elemento->pai);	
+						rotacao_simples_direitaRB(raiz, elemento->pai);	
 				
                 elemento->pai->pai->cor = PRETO;
 				elemento->pai->cor = VERMELHO;
@@ -472,7 +461,7 @@ void reajustar(arvoreRB *raiz, arvoreRB elemento){
 	   cor(irmao(elemento)->dir) == PRETO &&
 	   cor(irmao(elemento)->esq) ==VERMELHO) {	
 
-			rotacao_simples_direita(raiz, irmao(elemento));
+			rotacao_simples_direitaRB(raiz, irmao(elemento));
 			recolorir(irmao(elemento));
 			if(irmao(elemento)->esq != NULL)
 				irmao(elemento)->esq->cor = PRETO;
@@ -487,7 +476,7 @@ void reajustar(arvoreRB *raiz, arvoreRB elemento){
 	    cor(irmao(elemento)->dir) == VERMELHO &&
 	    cor(irmao(elemento)->esq) == PRETO) {	
 
-			rotacao_simples_esquerda(raiz, irmao(elemento));
+			rotacao_simples_esquerdaRB(raiz, irmao(elemento));
 			recolorir(irmao(elemento));
 			if(irmao(elemento)->dir != NULL)
 				irmao(elemento)->dir->cor = PRETO; 
@@ -505,7 +494,7 @@ void reajustar(arvoreRB *raiz, arvoreRB elemento){
 			elemento->pai->cor = PRETO;
 			irmao(elemento)->dir->cor = PRETO;
 
-			rotacao_simples_esquerda(raiz, elemento->pai);
+			rotacao_simples_esquerdaRB(raiz, elemento->pai);
 			retira_duplo_preto(raiz, elemento);
 
 			return;
@@ -520,7 +509,7 @@ void reajustar(arvoreRB *raiz, arvoreRB elemento){
 			elemento->pai->cor = PRETO;
 			irmao(elemento)->esq->cor = PRETO;
 
-			rotacao_simples_direita(raiz, elemento->pai);
+			rotacao_simples_direitaRB(raiz, elemento->pai);
 			retira_duplo_preto(raiz, elemento);
 
 			return;

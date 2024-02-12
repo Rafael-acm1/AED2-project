@@ -8,6 +8,15 @@ void inicializarAVL(arvoreAVL *raiz) {
 	*raiz = NULL;
 }
 
+void in_orderAVL(arvoreAVL raiz){
+    if(raiz != NULL){
+        
+
+        in_orderAVL(raiz->esq);
+        printf("[%d]", raiz->valor->chave);
+        in_orderAVL(raiz->dir);
+    }
+}
 arvoreAVL rotacao_simples_esquerda(arvoreAVL pivo) {
     //inicialização
     arvoreAVL u, t1, t2, t3;
@@ -98,7 +107,7 @@ arvoreAVL inserirAVL(arvoreAVL raiz, int valor, int *cresceu){
         //1. Alocar espaço em memória
         arvoreAVL nova = (arvoreAVL) malloc(sizeof(struct no_avl));
         //2. Inicializar o novo nó
-        nova->valor = valor;
+        nova->valor->chave = valor;
         nova->esq = NULL;
         nova->dir = NULL;
         nova->fb = 0;
@@ -109,7 +118,7 @@ arvoreAVL inserirAVL(arvoreAVL raiz, int valor, int *cresceu){
     }
     //caso indutivo
     else {
-        if(valor > raiz->valor) {
+        if(valor > raiz->valor->chave) {
             raiz->dir = inserirAVL(raiz->dir, valor, cresceu);
             //após inserir, é preciso atualizar os fatores de balanço
             //fator de balanço "atual" => raiz->fb
@@ -154,15 +163,7 @@ arvoreAVL inserirAVL(arvoreAVL raiz, int valor, int *cresceu){
 }
 
 
-void in_orderAVL(arvoreAVL raiz){
-    if(raiz != NULL){
-        
 
-        in_orderAVL(raiz->esq);
-        printf("[%d]", raiz->valor);
-        in_orderAVL(raiz->dir);
-    }
-}
 
 
 
@@ -171,10 +172,10 @@ arvoreAVL buscaAVL(int valor, arvoreAVL raiz) {
         return NULL;
     }
 
-    if (raiz->valor == valor) {
+    if (raiz->valor->chave == valor) {
         return raiz;
     } else {
-        if (valor >= raiz->valor) {
+        if (valor >= raiz->valor->chave) {
             return buscaAVL(valor, raiz->dir);
         } else {
             return buscaAVL(valor, raiz->esq);
@@ -193,12 +194,12 @@ void filhos(arvoreAVL filha) {
 }
 arvoreAVL descendentes(int valor,arvoreAVL raiz){
     
-    if (raiz->valor == valor ){
-        printf("Descendentes de [%d]: ", raiz->valor);
+    if (raiz->valor->chave == valor ){
+        printf("Descendentes de [%d]: ", raiz->valor->chave);
         filhos(raiz);
         printf("\n");
     } else{
-        if(valor >= raiz->valor){
+        if(valor >= raiz->valor->chave){
             return  descendentes(valor, raiz->dir);
         } else{
             return  descendentes(valor, raiz->esq);
@@ -229,12 +230,12 @@ int alturaAVL(arvoreAVL raiz){
     }
 }
 
-int maior(arvoreAVL no) {
+int maiorAVL(arvoreAVL no) {
     // Encontrar o elemento mais à direita da árvore
     while (no->dir != NULL) {
         no = no->dir;
     }
-    return no->valor;
+    return no->valor->chave;
 }
 
 int fator_balanceamento(arvoreAVL N) {
@@ -249,14 +250,15 @@ int fator_balanceamento(arvoreAVL N) {
     return altura_esq - altura_dir;
 }
 
-arvoreAVL remover_avl(arvoreAVL raiz, int valor) {
+
+arvoreAVL removerAVL(arvoreAVL raiz, int  valor) {
     if (raiz == NULL)
         return NULL;
 
-    if (valor < raiz->valor) {
-        raiz->esq = remover(raiz->esq, valor);
-    } else if (valor > raiz->valor) {
-        raiz->dir = remover(raiz->dir, valor);
+    if (valor < raiz->valor->chave) {
+        raiz->esq = removerAVL(raiz->esq, valor);
+    } else if (valor > raiz->valor->chave) {
+        raiz->dir = removerAVL(raiz->dir, valor);
     } else {
         // Element to be deleted found
 
@@ -283,32 +285,32 @@ arvoreAVL remover_avl(arvoreAVL raiz, int valor) {
         // caso 3: dois filhos
         if (raiz->esq != NULL && raiz->dir != NULL) {
             // localizar o maior elemento da subárvore esquerda
-            raiz->valor = maior(raiz->esq);
+            raiz->valor->chave = maiorAVL(raiz->esq);
 
             // remover a duplicata na subárvore esq
-            raiz->esq = remover(raiz->esq, raiz->valor);
+            raiz->esq = removerAVL(raiz->esq, raiz->valor->chave);
         }
     }
 
     // Realizar rotações, se necessário
     // Rotação à direita
-    if (raiz->fb > 1 && valor < raiz->esq->valor) {
+    if (raiz->fb > 1 && valor < raiz->esq->valor->chave) {
         return rotacao_simples_direita(raiz);
     }
 
     // Rotação à esquerda
-    if (raiz->fb < -1 && valor > raiz->dir->valor) {
+    if (raiz->fb < -1 && valor > raiz->dir->valor->chave) {
         return rotacao_simples_esquerda(raiz);
     }
 
     // Rotação dupla à esquerda e depois à direita
-    if (raiz->fb > 1 && valor > raiz->esq->valor) {
+    if (raiz->fb > 1 && valor > raiz->esq->valor->chave) {
         raiz->esq = rotacao_simples_esquerda(raiz->esq);
         return rotacao_simples_direita(raiz);
     }
 
     // Rotação dupla à direita e depois à esquerda
-    if (raiz->fb < -1 && valor < raiz->dir->valor) {
+    if (raiz->fb < -1 && valor < raiz->dir->valor->chave) {
         raiz->dir = rotacao_simples_direita(raiz->dir);
         return rotacao_simples_esquerda(raiz);
     }

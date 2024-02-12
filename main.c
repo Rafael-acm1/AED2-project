@@ -18,9 +18,9 @@ int main(void) {
                 adicionarJogador(&tb, lerDados());
                 break;
             case 2: // Imprimir elementos
-                in_orderBST(&tb);
-                in_orderAVL(&tb);
-                in_orderRB(&tb);
+                in_orderBST(tb.indice_bst);
+                in_orderAVL(tb.indice_avl);
+                in_orderRB(tb.indice_rb);
                 break;
             case 3: // BUSCAR ELEMENTO
                 scanf("%d", &chave);

@@ -8,15 +8,17 @@ void inicializarBST(arvoreBST *raiz) {
 	*raiz = NULL;
 }
 
+
+
 arvoreBST inserirBST(int valor, arvoreBST raiz){
     if(raiz == NULL){
         arvoreBST novo = (arvoreBST) malloc(sizeof(struct no_bst));
         novo ->dir = NULL;
         novo-> esq = NULL;
-        novo->valor = valor;
+        novo->valor->chave = valor;
         return novo;
     }else{
-        if(valor >= raiz->valor){
+        if(valor >= raiz->valor->chave){
             raiz->dir = inserirBST(valor, raiz->dir);
         } else{
             raiz->esq  = inserirBST(valor, raiz->esq);
@@ -45,24 +47,24 @@ arvoreBST buscaBST(int valor, arvoreBST raiz) {
         return NULL;
     }
 
-    if (raiz->valor == valor) {
+    if (raiz->valor->chave == valor) {
         return raiz;
     } else {
-        if (valor >= raiz->valor) {
-            return busca(valor, raiz->dir);
+        if (valor >= raiz->valor->chave) {
+            return buscaBST(valor, raiz->dir);
         } else {
-            return busca(valor, raiz->esq);
+            return buscaBST(valor, raiz->esq);
         }
     }
 }
 
 
-arvoreBST remover(arvoreBST raiz, int valor){
+arvoreBST removerBST(arvoreBST raiz, int valor){
     if(raiz == NULL){
     printf("Arvore vazia");
     return NULL;
     }
-    if (raiz->valor == valor){
+    if (raiz->valor->chave == valor){
         //caso 1: elemento não possui filhos
         if(raiz->dir == NULL && raiz->esq == NULL){
             free(raiz);
@@ -87,11 +89,11 @@ arvoreBST remover(arvoreBST raiz, int valor){
 
         if(raiz->esq != NULL && raiz->dir != NULL){
             arvoreBST temp = raiz->esq;
-            arvoreBST maiorEsqueda = procuraMaiorEsquerda(temp);
+            arvoreBST maiorEsquerda = procuraMaiorEsquerda(temp);
             //copiar o valor desse elemento para a raiz relativa
-            raiz->valor = maiorEsqueda->valor;
+            raiz->valor = maiorEsquerda->valor;
             //remover a duplicata NA SUB-ÁRVORE ESQ
-            raiz->esq = remover(raiz->esq, maiorEsqueda->valor);
+            raiz->esq = removerBST(raiz->esq, maiorEsquerda->valor->chave);
         }
 
 
