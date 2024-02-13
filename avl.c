@@ -8,15 +8,7 @@ void inicializarAVL(arvoreAVL *raiz) {
 	*raiz = NULL;
 }
 
-void in_orderAVL(arvoreAVL raiz){
-    if(raiz != NULL){
-        
 
-        in_orderAVL(raiz->esq);
-        printf("[%d]", raiz->valor->chave);
-        in_orderAVL(raiz->dir);
-    }
-}
 arvoreAVL rotacao_simples_esquerda(arvoreAVL pivo) {
     //inicialização
     arvoreAVL u, t1, t2, t3;
@@ -101,13 +93,11 @@ arvoreAVL rotacao(arvoreAVL pivo) {
 }
 
 
-arvoreAVL inserirAVL(arvoreAVL raiz, int valor, int *cresceu){
+arvoreAVL inserirAVL(arvoreAVL raiz, tipo_dado *valor, int *cresceu){
     //caso base
     if(raiz == NULL) {
-        //1. Alocar espaço em memória
         arvoreAVL nova = (arvoreAVL) malloc(sizeof(struct no_avl));
-        //2. Inicializar o novo nó
-        nova->valor->chave = valor;
+        nova->valor = valor;
         nova->esq = NULL;
         nova->dir = NULL;
         nova->fb = 0;
@@ -118,11 +108,8 @@ arvoreAVL inserirAVL(arvoreAVL raiz, int valor, int *cresceu){
     }
     //caso indutivo
     else {
-        if(valor > raiz->valor->chave) {
+        if(valor->chave > raiz->valor->chave) {
             raiz->dir = inserirAVL(raiz->dir, valor, cresceu);
-            //após inserir, é preciso atualizar os fatores de balanço
-            //fator de balanço "atual" => raiz->fb
-            //sub-árvore cresceu ou não => *cresceu
             if(*cresceu) {
                 switch(raiz->fb) {
                     case 0:

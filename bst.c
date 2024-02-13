@@ -10,15 +10,15 @@ void inicializarBST(arvoreBST *raiz) {
 
 
 
-arvoreBST inserirBST(int valor, arvoreBST raiz){
+arvoreBST inserirBST(tipo_dado *valor, arvoreBST raiz){
     if(raiz == NULL){
         arvoreBST novo = (arvoreBST) malloc(sizeof(struct no_bst));
-        novo ->dir = NULL;
-        novo-> esq = NULL;
-        novo->valor->chave = valor;
+        novo->dir = NULL;
+        novo->esq = NULL;
+        novo->valor = valor;
         return novo;
     }else{
-        if(valor >= raiz->valor->chave){
+        if(valor->chave >= raiz->valor->chave){
             raiz->dir = inserirBST(valor, raiz->dir);
         } else{
             raiz->esq  = inserirBST(valor, raiz->esq);
@@ -29,40 +29,10 @@ arvoreBST inserirBST(int valor, arvoreBST raiz){
 }
 
 
-void in_orderBST(arvoreBST raiz){
-    if(raiz != NULL){
-        
-
-        in_orderBST(raiz->esq);
-        printf("[%d]", raiz->valor);
-        in_orderBST(raiz->dir);
-    }
-}
-
-
-
-
-arvoreBST buscaBST(int valor, arvoreBST raiz) {
-    if (raiz == NULL) {
-        return NULL;
-    }
-
-    if (raiz->valor->chave == valor) {
-        return raiz;
-    } else {
-        if (valor >= raiz->valor->chave) {
-            return buscaBST(valor, raiz->dir);
-        } else {
-            return buscaBST(valor, raiz->esq);
-        }
-    }
-}
-
-
 arvoreBST removerBST(arvoreBST raiz, int valor){
     if(raiz == NULL){
     printf("Arvore vazia");
-    return NULL;
+        return NULL;
     }
     if (raiz->valor->chave == valor){
         //caso 1: elemento não possui filhos

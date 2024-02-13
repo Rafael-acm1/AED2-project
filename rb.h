@@ -5,14 +5,14 @@
 
 
 void inicializarRB(arvoreRB *raiz);
-void inserirRB (int valor, arvoreRB *raiz);
+void inserirRB (tipo_dado *valor, arvoreRB *raiz);
 void removerRB (int valor, arvoreRB *raiz);
 void recolorir(arvoreRB pivo);
 int alturaRB(arvoreRB raiz);
 int maior(int a, int b);
 int maior_elemento(arvoreRB raiz);
 int menor_elemento(arvoreRB raiz);
-void in_orderRB(arvoreRB raiz);
+// void in_orderRB(arvoreRB raiz);
 
 void imprimir_elemento(arvoreRB raiz);
 void imprimir(arvoreRB raiz);

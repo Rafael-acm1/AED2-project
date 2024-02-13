@@ -30,14 +30,14 @@ void rotacao_dupla_esquerdaRB(arvoreRB *raiz, arvoreRB pivo){
     rotacao_simples_direitaRB(raiz, pivo->dir);
     rotacao_simples_esquerdaRB(raiz, pivo);
 }
-void inserirRB (int valor, arvoreRB *raiz) {
+void inserirRB (tipo_dado *valor, arvoreRB *raiz) {
 	arvoreRB posicao, pai, novo;
 	posicao = *raiz;
 	pai = NULL;
 
 	 while(posicao != NULL) {
 			pai = posicao;
-			if(valor > posicao->dado->chave) 
+			if(valor->chave > posicao->dado->chave) 
 					posicao = posicao->dir;
 			else 
 					posicao = posicao->esq;
@@ -46,7 +46,7 @@ void inserirRB (int valor, arvoreRB *raiz) {
 
   
 	novo = (arvoreRB) malloc(sizeof(struct no_rb));
-	novo->dado->chave = valor;
+	novo->dado = valor;
 	novo->esq = NULL;
 	novo->dir = NULL;
 	novo->pai = pai;
@@ -57,7 +57,7 @@ void inserirRB (int valor, arvoreRB *raiz) {
 			*raiz = novo;
 	else {
       
-		if(valor > pai->dado->chave)
+		if(valor->chave > pai->dado->chave)
 			pai->dir = novo;
 		else
 			pai->esq = novo;
@@ -278,16 +278,6 @@ int menor_elemento(arvoreRB raiz) {
 }
 
 
-
-
-
-void in_orderRB(arvoreRB raiz) {
-	if(raiz != NULL) {
-		in_orderRB(raiz->esq);
-		imprimir_elemento(raiz);
-		in_orderRB(raiz->dir);
-	}
-}
 
 void imprimir_elemento(arvoreRB raiz) {
 	switch(raiz->cor){

@@ -5,6 +5,17 @@
 #include "rb.h"
 #include "bst.h"
 
+arvoreBST procuraMaiorEsquerda(arvoreBST raiz);
+void inicializarBST(arvoreBST *raiz);
+arvoreBST inserirBST(tipo_dado *valor, arvoreBST raiz);
+int alturaBST(arvoreBST raiz);
+arvoreBST removerBST(arvoreBST raiz, int valor);
+void imprimir_elemento_bst(arvoreBST raiz, tabela * tb);
+void in_orderBST(arvoreBST raiz, tabela *tabela);
+void in_orderAVL(arvoreAVL raiz,tabela *tabela);
+void in_orderRB(arvoreRB raiz, tabela *tabela);
+
+
 
 // void in_orderBST(arvoreBST raiz){
 //     if(raiz != NULL){
@@ -14,44 +25,71 @@
 //     }
 // }
 
-void in_orderBST(arvoreBST raiz){
+void imprimir_elemento_bst(arvoreBST raiz, tabela * tb) {
+  jogadorSP *temp = (jogadorSP*) malloc(sizeof(jogadorSP));
+  temp->numerocamisa = 999;
+  printf("Indice: %d\n", raiz->valor->indice);
+  fseek(tb->arquivo_dados, raiz->valor->indice, SEEK_SET);
+  fread(temp, sizeof(jogadorSP), 1, tb->arquivo_dados);
+  printf("[%s, %s, %s, %d, %d, ]\n",temp->nome, temp->posição, temp->nacionalidade, temp->numerocamisa, temp->idade);
+  free(temp);
+}
+
+void imprimir_elemento_avl(arvoreAVL raiz, tabela * tb) {
+  jogadorSP *temp = (jogadorSP*) malloc(sizeof(jogadorSP));
+  temp->numerocamisa = 999;
+  printf("Indice: %d\n", raiz->valor->indice);
+  fseek(tb->arquivo_dados, raiz->valor->indice, SEEK_SET);
+  fread(temp, sizeof(jogadorSP), 1, tb->arquivo_dados);
+  printf("[%s, %s, %s, %d, %d, ]\n",temp->nome, temp->posição, temp->nacionalidade, temp->numerocamisa, temp->idade);
+  free(temp);
+}
+
+void imprimir_elemento_rb(arvoreRB raiz, tabela * tb) {
+  jogadorSP *temp = (jogadorSP*) malloc(sizeof(jogadorSP));
+  temp->numerocamisa = 999;
+  printf("Indice: %d\n", raiz->dado->indice);
+  fseek(tb->arquivo_dados, raiz->dado->indice, SEEK_SET);
+  fread(temp, sizeof(jogadorSP), 1, tb->arquivo_dados);
+  printf("[%s, %s, %s, %d, %d, ]\n",temp->nome, temp->posição, temp->nacionalidade, temp->numerocamisa, temp->idade);
+  free(temp);
+}
+  
+void in_orderBST(arvoreBST raiz, tabela *tabela){
     if(raiz != NULL){
         
+        in_orderBST(raiz->esq, tabela);
+        imprimir_elemento_bst(raiz, tabela);
+        in_orderBST(raiz->dir, tabela);
+    }
+}
+void in_orderAVL(arvoreAVL raiz, tabela *tabela){
+    if(raiz != NULL){
+        in_orderAVL(raiz->esq, tabela);
+        imprimir_elemento_avl(raiz, tabela);
+        in_orderAVL(raiz->dir, tabela);
+    }
+}
 
-        in_orderBST(raiz->esq);
-        printf("[%d]", raiz->valor);
-        in_orderBST(raiz->dir);
-    }
+void in_orderRB(arvoreRB raiz, tabela *tabela) {
+	if(raiz != NULL) {
+		in_orderRB(raiz->esq,tabela);
+		imprimir_elemento_rb(raiz, tabela);
+		in_orderRB(raiz->dir,tabela);
+	}
 }
-arvoreBST inserirBST(int valor, arvoreBST raiz){
-    if(raiz == NULL){
-        arvoreBST novo = (arvoreBST) malloc(sizeof(struct no_bst));
-        novo->dir = NULL;
-        novo->esq = NULL;
-        novo->valor->chave = valor;
-        return novo;
-    }else{
-        if(valor >= raiz->valor->chave){
-            raiz->dir = inserirBST(valor, raiz->dir);
-        } else{
-            raiz->esq  = inserirBST(valor, raiz->esq);
-        }
-    return raiz;
-    }
-    
-}
+
 void adicionarIndice(tabela *tab, tipo_dado *valor) {
     int cresceu;
-    tab->indice_bst = inserirBST(tab->indice_bst, valor->chave);
-    tab->indice_avl = inserirAVL(tab->indice_avl, valor->chave, cresceu);
-    inserirRB(valor->chave, tab->indice_rb);
-    // tab->indice_rb = inserirRB(tab->indice_rb, valor->chave);
+    tab->indice_bst = inserirBST(valor, tab->indice_bst);
+    tab->indice_avl = inserirAVL(tab->indice_avl, valor, &cresceu);
+    inserirRB(valor, &tab->indice_rb);
 }
-void removerIndice(tabela *tab, int *valor) {
+void removerIndice(tabela *tab, int valor) {
     int cresceu;
     tab->indice_bst = removerBST(tab->indice_bst, valor);
     tab->indice_avl = removerAVL(tab->indice_avl, valor);
-    removerRB(valor, tab->indice_rb);
+    removerRB(valor, &tab->indice_rb);
 }
 void inicializarIndices(tabela *tab) {
     inicializarAVL(&tab->indice_avl);
@@ -67,7 +105,7 @@ void carregarArquivos(tabela *tab) {
     if(arqAVL != NULL) {
         temp = (tipo_dado*) malloc(sizeof(tipo_dado));
         while(fread(temp, sizeof(tipo_dado), 1, arqAVL)) {
-            tab->indice_avl = inserirAVL(tab->indice_avl, temp, cresceu);
+            tab->indice_avl = inserirAVL(tab->indice_avl, temp, &cresceu);
             temp = (tipo_dado*) malloc(sizeof(tipo_dado));
         }
         fclose(arqAVL);
@@ -143,7 +181,10 @@ void adicionarJogador(tabela *tabela, jogadorSP *jogador) {
         novo_dado->indice = ftell(tabela->arquivo_dados);
 
         fwrite(jogador, sizeof(jogadorSP), 1, tabela->arquivo_dados);
-        adicionarIndice(tabela, novo_dado);
+        int cresceu;
+        tabela->indice_bst = inserirBST(novo_dado, tabela->indice_bst);
+        tabela->indice_avl = inserirAVL(tabela->indice_avl, novo_dado, &cresceu);
+        inserirRB(novo_dado, &tabela->indice_rb);
     }
 }
 
@@ -205,14 +246,30 @@ void finalizar(tabela *tab) {
 
     // h)
 
-void busca(tabela *tab, arvoreAVL raiz, int chave) {
-    if (raiz == NULL)
+// void busca(tabela *tab, arvoreAVL raiz, int chave) {
+//     if (raiz == NULL)
+//         return;
+
+//     if (raiz->valor->chave == chave)
+//         imprimir_elemento_bst(raiz, tab);
+//     if (chave > raiz->valor->chave)
+//         busca(tab, raiz->dir, chave);
+//     else
+//         busca(tab, raiz->esq, chave);
+// }
+
+void buscaBST(int valor, arvoreBST raiz, tabela *tabela) {
+    if (raiz == NULL) {
         return;
-    
-    if (raiz->valor->chave == chave)
-        
-    if (chave > raiz->valor->chave)
-        busca(tab, raiz->dir, chave);
-    else
-        busca(tab, raiz->esq, chave);
+    }
+
+    if (raiz->valor->chave == valor) {
+        imprimir_elemento_bst(raiz, tabela);
+    } else {
+        if (valor >= raiz->valor->chave) {
+            buscaBST(valor, raiz->dir, tabela);
+        } else {
+            buscaBST(valor, raiz->esq, tabela);
+        }
+    }
 }

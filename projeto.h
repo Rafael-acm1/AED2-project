@@ -50,10 +50,11 @@ int inicializarTabela(tabela *tabela);
 void adicionarJogador(tabela *tabela, jogadorSP *jogador);
 jogadorSP* lerDados();
 void finalizar(tabela *tab);
-void in_orderAVL(arvoreAVL raiz);
-void removerIndice(tabela *tab, int *valor);
+void in_orderAVL(arvoreAVL raiz, tabela *tabela);
+void removerIndice(tabela *tab, int valor);
 void adicionarIndice(tabela *tab, tipo_dado *valor);
-void in_orderBST(arvoreBST raiz);
-arvoreBST inserirBST(int valor, arvoreBST raiz);
+void in_orderBST(arvoreBST raiz, tabela *tabela);
+void in_orderRB(arvoreRB raiz, tabela *tabela);
+void buscaBST(int valor, arvoreBST raiz, tabela *tabela);
 
 #endif

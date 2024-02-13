@@ -18,17 +18,17 @@ int main(void) {
                 adicionarJogador(&tab, lerDados());
                 break;
             case 2: // Imprimir elementos
-                in_orderBST(tab.indice_bst);
-                in_orderAVL(tab.indice_avl);
-                in_orderRB(tab.indice_rb);
+                in_orderBST(tab.indice_bst, &tab);
+                in_orderAVL(tab.indice_avl, &tab);
+                in_orderRB(tab.indice_rb, &tab);
                 break;
             case 3: // BUSCAR ELEMENTO
                 scanf("%d", &chave);
-                buscaBST(chave, tab.indice_bst);
+                buscaBST(chave, tab.indice_bst, &tab);
                 break;
             case 4: // REMOVER ELEMENTO
                 scanf("%d", &chave);
-                removerIndice(&tab, &chave);
+                removerIndice(&tab, chave);
                 break;
             case 99: // SAIR
                 finalizar(&tab);
