@@ -31,7 +31,7 @@ void imprimir_elemento_bst(arvoreBST raiz, tabela * tb) {
   printf("Indice: %d\n", raiz->valor->indice);
   fseek(tb->arquivo_dados, raiz->valor->indice, SEEK_SET);
   fread(temp, sizeof(jogadorSP), 1, tb->arquivo_dados);
-  printf("[%s, %s, %s, %d, %d, ]\n",temp->nome, temp->posição, temp->nacionalidade, temp->numerocamisa, temp->idade);
+  printf("[%s, %s, %s, %d, %d, ]\n",temp->nome, temp->posicao, temp->nacionalidade, temp->numerocamisa, temp->idade);
   free(temp);
 }
 
@@ -41,7 +41,7 @@ void imprimir_elemento_avl(arvoreAVL raiz, tabela * tb) {
   printf("Indice: %d\n", raiz->valor->indice);
   fseek(tb->arquivo_dados, raiz->valor->indice, SEEK_SET);
   fread(temp, sizeof(jogadorSP), 1, tb->arquivo_dados);
-  printf("[%s, %s, %s, %d, %d, ]\n",temp->nome, temp->posição, temp->nacionalidade, temp->numerocamisa, temp->idade);
+  printf("[%s, %s, %s, %d, %d, ]\n",temp->nome, temp->posicao, temp->nacionalidade, temp->numerocamisa, temp->idade);
   free(temp);
 }
 
@@ -51,13 +51,12 @@ void imprimir_elemento_rb(arvoreRB raiz, tabela * tb) {
   printf("Indice: %d\n", raiz->dado->indice);
   fseek(tb->arquivo_dados, raiz->dado->indice, SEEK_SET);
   fread(temp, sizeof(jogadorSP), 1, tb->arquivo_dados);
-  printf("[%s, %s, %s, %d, %d, ]\n",temp->nome, temp->posição, temp->nacionalidade, temp->numerocamisa, temp->idade);
+  printf("[%s, %s, %s, %d, %d, ]\n",temp->nome, temp->posicao, temp->nacionalidade, temp->numerocamisa, temp->idade);
   free(temp);
 }
   
 void in_orderBST(arvoreBST raiz, tabela *tabela){
     if(raiz != NULL){
-        
         in_orderBST(raiz->esq, tabela);
         imprimir_elemento_bst(raiz, tabela);
         in_orderBST(raiz->dir, tabela);
@@ -155,8 +154,8 @@ jogadorSP* lerDados() {
     tirarEnter(novo->nome);
 
     printf("Posição: ");
-    fgets(novo->posição, 20, stdin);
-    tirarEnter(novo->posição);
+    fgets(novo->posicao, 20, stdin);
+    tirarEnter(novo->posicao);
 
     printf("Nacionalidade: ");
     fgets(novo->nacionalidade, 30, stdin);

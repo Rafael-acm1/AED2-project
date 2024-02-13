@@ -6,7 +6,7 @@ enum cor { VERMELHO, PRETO, DUPLO_PRETO };
 
 typedef struct JogadorSP {
 	char nome[50];
-	char posição[20];
+	char posicao[20];
     char nacionalidade[30];
     int idade;
     int numerocamisa;
