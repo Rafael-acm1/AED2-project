@@ -10,7 +10,7 @@ void removerRB (int valor, arvoreRB *raiz);
 void recolorir(arvoreRB pivo);
 int alturaRB(arvoreRB raiz);
 int maior(int a, int b);
-int maior_elemento(arvoreRB raiz);
+tipo_dado *maior_elemento(arvoreRB raiz);
 int menor_elemento(arvoreRB raiz);
 // void in_orderRB(arvoreRB raiz);
 

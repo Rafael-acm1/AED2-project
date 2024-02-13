@@ -7,7 +7,7 @@
 void inicializarAVL(arvoreAVL *raiz); 
 arvoreAVL inserirAVL(arvoreAVL raiz, tipo_dado *valor, int *cresceu);
 // void in_orderAVL(arvoreAVL raiz);
-int maiorAVL(arvoreAVL no);
+tipo_dado *maiorAVL(arvoreAVL no);
 arvoreAVL buscaAVL(int valor, arvoreAVL raiz);
 int pai(arvoreAVL raiz, int i);
 int alturaAVL(arvoreAVL raiz);

@@ -22,8 +22,11 @@ int main(void) {
                 adicionarJogador(&tab, lerDados());
                 break;
             case 2: // Imprimir elementos
+                printf("\nBST :\n");
                 in_orderBST(tab.indice_bst, &tab);
+                printf("\nAVL :\n");
                 in_orderAVL(tab.indice_avl, &tab);
+                printf("\nRB :\n");
                 in_orderRB(tab.indice_rb, &tab);
                 break;
             case 3: // BUSCAR ELEMENTO

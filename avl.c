@@ -217,12 +217,12 @@ int alturaAVL(arvoreAVL raiz){
     }
 }
 
-int maiorAVL(arvoreAVL no) {
+tipo_dado *maiorAVL(arvoreAVL no) {
     // Encontrar o elemento mais à direita da árvore
     while (no->dir != NULL) {
         no = no->dir;
     }
-    return no->valor->chave;
+    return no->valor;
 }
 
 int fator_balanceamento(arvoreAVL N) {
@@ -239,15 +239,19 @@ int fator_balanceamento(arvoreAVL N) {
 
 
 arvoreAVL removerAVL(arvoreAVL raiz, int  valor) {
+    
+    // printf("%d\n", raiz->valor->chave);
+
     if (raiz == NULL)
         return NULL;
 
     if (valor < raiz->valor->chave) {
+        // printf("entrou na raiz esquerda\n");
         raiz->esq = removerAVL(raiz->esq, valor);
     } else if (valor > raiz->valor->chave) {
+        // printf("entrou na raiz direita\n");
         raiz->dir = removerAVL(raiz->dir, valor);
     } else {
-        // Element to be deleted found
 
         // caso 1: elemento não possui filhos (folha)
         if (raiz->esq == NULL && raiz->dir == NULL) {
@@ -272,8 +276,7 @@ arvoreAVL removerAVL(arvoreAVL raiz, int  valor) {
         // caso 3: dois filhos
         if (raiz->esq != NULL && raiz->dir != NULL) {
             // localizar o maior elemento da subárvore esquerda
-            raiz->valor->chave = maiorAVL(raiz->esq);
-
+            raiz->valor = maiorAVL(raiz->esq);
             // remover a duplicata na subárvore esq
             raiz->esq = removerAVL(raiz->esq, raiz->valor->chave);
         }

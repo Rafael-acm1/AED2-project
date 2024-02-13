@@ -259,11 +259,11 @@ int maior(int a, int b) {
 		return b;
 }
 
-int maior_elemento(arvoreRB raiz) {
+tipo_dado *maior_elemento(arvoreRB raiz) {
 	if(raiz == NULL)
-			return -1;
+			return NULL;
 	if(raiz->dir == NULL)
-			return raiz->dado->chave;
+			return raiz->dado;
 	else
 			return maior_elemento(raiz->dir);
 }
@@ -274,7 +274,7 @@ int menor_elemento(arvoreRB raiz) {
 	if(raiz->esq == NULL)
 			return raiz->dado->chave;
 	else
-			return maior_elemento(raiz->esq);
+			return 10;
 }
 
 
@@ -300,7 +300,7 @@ void removerRB (int valor, arvoreRB *raiz) {
 	while(posicao != NULL) {
 		if(valor == posicao->dado->chave) {
             if(posicao->esq != NULL && posicao->dir != NULL) { 
-    			posicao->dado->chave = maior_elemento(posicao->esq);   
+    			posicao->dado = maior_elemento(posicao->esq);   
 	    		removerRB(posicao->dado->chave, &(posicao->esq));
                 break;
             }

@@ -34,6 +34,13 @@ arvoreBST removerBST(arvoreBST raiz, int valor){
     printf("Arvore vazia");
         return NULL;
     }
+     if(valor > raiz->valor->chave){
+            raiz->dir = removerBST(raiz->dir, valor);
+        }
+
+    if(valor < raiz->valor->chave){
+             raiz->esq = removerBST(raiz->esq, valor);
+        }
     if (raiz->valor->chave == valor){
         //caso 1: elemento não possui filhos
         if(raiz->dir == NULL && raiz->esq == NULL){
@@ -63,13 +70,13 @@ arvoreBST removerBST(arvoreBST raiz, int valor){
             //copiar o valor desse elemento para a raiz relativa
             raiz->valor = maiorEsquerda->valor;
             //remover a duplicata NA SUB-ÁRVORE ESQ
-            raiz->esq = removerBST(raiz->esq, maiorEsquerda->valor->chave);
+            raiz->esq = removerBST(raiz->esq, raiz->valor->chave);
         }
 
-
-        //}
+       
     }
     return raiz;
+
 }
 
 arvoreBST procuraMaiorEsquerda(arvoreBST raiz){
