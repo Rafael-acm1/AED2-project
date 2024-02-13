@@ -13,6 +13,33 @@
 //         in_orderBST(raiz->dir);
 //     }
 // }
+
+void in_orderBST(arvoreBST raiz){
+    if(raiz != NULL){
+        
+
+        in_orderBST(raiz->esq);
+        printf("[%d]", raiz->valor);
+        in_orderBST(raiz->dir);
+    }
+}
+arvoreBST inserirBST(int valor, arvoreBST raiz){
+    if(raiz == NULL){
+        arvoreBST novo = (arvoreBST) malloc(sizeof(struct no_bst));
+        novo->dir = NULL;
+        novo->esq = NULL;
+        novo->valor->chave = valor;
+        return novo;
+    }else{
+        if(valor >= raiz->valor->chave){
+            raiz->dir = inserirBST(valor, raiz->dir);
+        } else{
+            raiz->esq  = inserirBST(valor, raiz->esq);
+        }
+    return raiz;
+    }
+    
+}
 void adicionarIndice(tabela *tab, tipo_dado *valor) {
     int cresceu;
     tab->indice_bst = inserirBST(tab->indice_bst, valor->chave);
@@ -60,7 +87,7 @@ void carregarArquivos(tabela *tab) {
     if(arqBST != NULL) {
         temp = (tipo_dado*) malloc(sizeof(tipo_dado));
         while(fread(temp, sizeof(tipo_dado), 1, arqBST)) {
-            tab->indice_bst->valor = inserirBST( temp->chave, tab->indice_bst);
+            tab->indice_bst = inserirBST(temp,tab->indice_bst);
             temp = (tipo_dado*) malloc(sizeof(tipo_dado));
         }
         fclose(arqBST);

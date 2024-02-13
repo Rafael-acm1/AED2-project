@@ -52,6 +52,8 @@ jogadorSP* lerDados();
 void finalizar(tabela *tab);
 void in_orderAVL(arvoreAVL raiz);
 void removerIndice(tabela *tab, int *valor);
-
+void adicionarIndice(tabela *tab, tipo_dado *valor);
+void in_orderBST(arvoreBST raiz);
+arvoreBST inserirBST(int valor, arvoreBST raiz);
 
 #endif

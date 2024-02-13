@@ -31,10 +31,11 @@ j) Implemente a função main que permite ao usuário utilizar o sistema com tod
 k) Ponto extra: Implemente uma tabela de relocação, que mantém o registro de cada elemento excluído para reutilizar o espaço no arquivo 
 de dados em futuras inserções.
 
-l) Ponto extra: Acrescente ao menos um campo string de tamanho variável. A forma de manipulação no arquivo de dados precisará adotar alguma
-estratégia de separação de campos e registros, por exemplo, formato XML, JSON, caractere separador, etc.
-Certifique-se de implementar a alocação dinâmica de memória para armazenar as strings de tamanho variável. Além disso, explique e implemente 
-uma estratégia adequada para a manipulação desses campos, como o uso de delimitadores ou formatos de serialização (XML, JSON, etc.), garantindo 
-a integridade dos dados ao ler e gravar no arquivo de dados. É importante observar que essa funcionalidade também terá impactos na 
-implementação da tabela de relocação de dados. A parte referente ao gerenciamento de strings de tamanho variável na memória RAM está 
-exemplificado no projeto "arquivo 2";
+l) Ponto extra: Acrescente ao menos um campo string de tamanho variável. A forma de manipulação no arquivo 
+de dados precisará adotar alguma estratégia de separação de campos e registros, por exemplo, formato XML, JSON,
+caractere separador, etc. Certifique-se de implementar a alocação dinâmica de memória para armazenar as strings
+de tamanho variável. Além disso, explique e implemente uma estratégia adequada para a manipulação desses campos, 
+como o uso de delimitadores ou formatos de serialização (XML, JSON, etc.), garantindo 
+a integridade dos dados ao ler e gravar no arquivo de dados. É importante observar que essa funcionalidade também
+terá impactos na implementação da tabela de relocação de dados. A parte referente ao gerenciamento de strings de 
+tamanho variável na memória RAM está exemplificado no projeto "arquivo 2";
